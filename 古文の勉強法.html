@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>古文が「呪文」に見えるなら、それは攻略法を知らないだけです。</title>
+<style>
+  :root {
+    --bg: #FAFAF7;
+    --surface: #FFFFFF;
+    --text: #1A1A1A;
+    --accent: #8B4513;
+    --accent-light: #FBF3EE;
+    --accent-mid: #D4956A;
+    --danger: #C0392B;
+    --danger-light: #FDF0EF;
+    --success: #1A6B3C;
+    --success-light: #EAF6EE;
+    --warn: #7A5C00;
+    --warn-light: #FDF8E8;
+    --rule: #E5DDD8;
+    --code-bg: #F5F0EC;
+    --radius: 8px;
+    --gap: 4.5em;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    font-size: 17px;
+    line-height: 1.9;
+    padding: 0 1em;
+  }
+
+  .container { max-width: 740px; margin: 0 auto; padding: 3em 0 6em; }
+
+  h1 {
+    font-size: 1.7em; font-weight: 900; line-height: 1.5;
+    letter-spacing: -0.02em; color: var(--accent);
+    border-left: 6px solid var(--accent); padding-left: 0.6em; margin-bottom: 2em;
+  }
+
+  nav {
+    background: var(--accent-light); border-radius: var(--radius);
+    padding: 1.4em 1.8em; margin-bottom: var(--gap);
+    border-left: 4px solid var(--accent-mid);
+  }
+  nav p.nav-title { font-weight: 800; color: var(--accent); margin-bottom: 0.8em; font-size: 0.95em; letter-spacing: 0.05em; }
+  nav ol { margin: 0; padding-left: 1.4em; color: var(--accent); font-size: 0.93em; line-height: 2.2; }
+  nav a { color: var(--accent); text-decoration: none; }
+
+  h2 { font-size: 1.25em; font-weight: 800; color: var(--text); margin-top: var(--gap); margin-bottom: 1.2em; padding-bottom: 0.4em; border-bottom: 2px solid var(--rule); }
+  h2.chapter { font-size: 1.3em; background: var(--accent); color: #fff; padding: 0.5em 0.8em; border-radius: var(--radius); border: none; }
+  h3 { font-size: 1.05em; font-weight: 700; color: var(--accent); margin-top: var(--gap); margin-bottom: 0.8em; }
+
+  p { margin-bottom: var(--gap); color: var(--text); }
+
+  blockquote {
+    background: var(--accent-light); border-left: 4px solid var(--accent-mid);
+    border-radius: 0 var(--radius) var(--radius) 0; padding: 1.2em 1.4em; margin-bottom: var(--gap);
+  }
+  blockquote p { margin-bottom: 0.6em; color: var(--accent); font-weight: 600; }
+  blockquote p:last-child { margin-bottom: 0; }
+
+  strong { color: var(--accent); font-weight: 700; }
+
+  pre {
+    background: var(--code-bg); border-radius: var(--radius); padding: 1.4em 1.6em;
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', monospace;
+    font-size: 0.88em; line-height: 2.3; overflow-x: auto;
+    margin-bottom: var(--gap); white-space: pre-wrap; word-break: break-all;
+  }
+
+  table { width: 100%; border-collapse: collapse; margin-bottom: var(--gap); font-size: 0.92em; }
+  th { background: var(--accent); color: #fff; padding: 0.6em 0.8em; text-align: left; font-weight: 700; }
+  td { padding: 0.6em 0.8em; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--accent-light); }
+
+  table.compare th { background: var(--accent); color: #fff; }
+  table.compare td.misconception { color: #B8A090; font-weight: 400; background: #FAF6F4; }
+  table.compare td.truth { color: var(--accent); font-weight: 800; font-size: 1.05em; background: var(--accent-light); }
+
+  hr { border: none; border-top: 2px solid var(--rule); margin: var(--gap) 0; }
+  ul, ol { padding-left: 1.6em; margin-bottom: var(--gap); }
+  li { margin-bottom: 0.5em; }
+
+  .badge-ng { display: inline-block; background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger); border-radius: 4px; padding: 0.1em 0.5em; font-size: 0.85em; font-weight: 700; margin-right: 0.3em; }
+  .badge-ok { display: inline-block; background: var(--success-light); color: var(--success); border: 1px solid var(--success); border-radius: 4px; padding: 0.1em 0.5em; font-size: 0.85em; font-weight: 700; margin-right: 0.3em; }
+
+  .how-label { display: inline-block; background: var(--accent); color: #fff; font-size: 0.78em; font-weight: 800; padding: 0.15em 0.55em; border-radius: 4px; margin-right: 0.4em; vertical-align: middle; letter-spacing: 0.05em; }
+  .evidence { display: inline-block; background: var(--warn-light); color: var(--warn); border-radius: 4px; font-size: 0.8em; font-weight: 700; padding: 0.1em 0.5em; margin-left: 0.3em; vertical-align: middle; }
+
+  .how-block { margin-bottom: var(--gap); }
+  .how-block .step { margin-bottom: 2em; padding: 1.2em 1.4em; background: var(--surface); border-radius: var(--radius); border-left: 3px solid var(--accent-mid); }
+  .how-block .step-label { display: block; font-weight: 800; color: var(--accent); font-size: 0.9em; letter-spacing: 0.03em; margin-bottom: 0.6em; }
+  .how-block .step-body { color: var(--text); line-height: 2.1; }
+  .how-block .step-body .ex { display: block; background: var(--code-bg); border-radius: 4px; padding: 0.6em 1em; margin-top: 0.8em; font-size: 0.9em; line-height: 2; }
+
+  .scene-box { background: var(--accent-light); border-radius: var(--radius); padding: 1.4em 1.6em; margin-bottom: var(--gap); border: 1px solid var(--accent-mid); }
+  .scene-box .scene-label { font-size: 0.8em; font-weight: 800; color: var(--accent-mid); letter-spacing: 0.08em; margin-bottom: 0.6em; display: block; }
+  .scene-box p { margin-bottom: 0; color: var(--accent); font-style: italic; line-height: 2; }
+
+  .stage-box { border: 2px solid var(--accent-mid); border-radius: var(--radius); padding: 1.2em 1.4em; margin-bottom: 1em; background: var(--surface); }
+  .stage-box .stage-num { display: inline-block; background: var(--accent); color: #fff; font-weight: 900; font-size: 0.8em; padding: 0.1em 0.6em; border-radius: 4px; margin-right: 0.5em; }
+  .stage-box .stage-title { font-weight: 800; color: var(--accent); font-size: 1.05em; }
+  .stage-box p { margin-top: 0.6em; margin-bottom: 0; font-size: 0.93em; color: var(--text); }
+
+  .action-box { background: var(--accent); color: #fff; border-radius: var(--radius); padding: 2em 2em; margin-top: var(--gap); }
+  .action-box h3 { color: #fff; font-size: 1.15em; margin-top: 0; margin-bottom: 1em; }
+  .action-box p { color: #F5E8DF; margin-bottom: 1em; }
+  .action-box ol { color: #F5E8DF; }
+  .action-box li { margin-bottom: 0.6em; }
+  .action-box .note { margin-top: 1.4em; font-size: 0.92em; color: #D4B09A; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 1em; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>古文が「呪文」に見えるなら、<br>それは攻略法を知らないだけです。</h1>
+
+<nav>
+  <p class="nav-title">目次</p>
+  <ol>
+    <li><a href="#intro">こんな気持ち、ありませんか</a></li>
+    <li><a href="#reason">なぜ古文だけ「やっても伸びない」のか</a></li>
+    <li><a href="#bad">伸びない勉強法の正体</a></li>
+    <li><a href="#good">伸びる勉強法：4段階の攻略ルート</a></li>
+    <li><a href="#how1">STAGE 1｜古文単語</a></li>
+    <li><a href="#how2">STAGE 2｜古典文法</a></li>
+    <li><a href="#how3">STAGE 3｜古文常識</a></li>
+    <li><a href="#how4">STAGE 4｜読解演習</a></li>
+    <li><a href="#how5">音読で加速させる</a></li>
+    <li><a href="#how6">和歌・修辞法の読み方</a></li>
+  </ol>
+</nav>
+
+<h2 id="intro">こんな気持ち、ありませんか</h2>
+
+<p>授業で古文の文章を開いたとき、こんなことを感じたことはありますか？</p>
+
+<blockquote>
+  <p>「文字は日本語なのに、何が書いてあるか全く分からない」</p>
+  <p>「助動詞の活用表を何度見ても、頭に入ってこない」</p>
+  <p>「現代語訳を見れば分かるのに、テストで解けない」</p>
+  <p>「英語や数学はやった分だけ伸びるのに、古文だけ何も変わらない気がする」</p>
+</blockquote>
+
+<p>古文が苦手なのは、あなたの読解力や記憶力の問題ではありません。<strong>「古文は現代語の延長だから、なんとなく読めるはず」という思い込みのせいで、正しい順番で勉強できていないだけです。</strong></p>
+
+<p>正しいやり方を知って、正しい順番で積み上げていけば、古文は必ず読めるようになります。この記事ではその方法を、「今日から自分がやる」場面がイメージできる粒度でお伝えします。</p>
+
+<hr>
+
+<h2 id="reason">なぜ古文だけ「やっても伸びない」のか</h2>
+
+<p>学校の古文の授業を思い出してください。多くの場合、教科書の文章を一人ひとり当てられて現代語訳するという形式ではないでしょうか。</p>
+
+<p>実はこの「全文現代語訳」授業では、古文の成績は上がりません。理由は2つあります。</p>
+
+<p><strong>1つ目は、古文は省略だらけだからです。</strong>問題集の解説を見てみてください。実際の古文より現代語訳の方が何倍も長くなっているはずです。主語・目的語・状況がことごとく省略されていて、それを全部補ってあるからです。この省略を自分で補えなければ「誰が何をしたのか」が分からないまま文章が終わります。</p>
+
+<p><strong>2つ目は、「なんとなく現代語に近いもの」として読もうとしてしまうことです。</strong>これが最大の罠です。古文は英語や中国語と同じ「別の言語」です。現代語の感覚でそのまま読もうとするから読めないのです。英語を「なんとなくローマ字読みすれば分かる」という姿勢で取り組む人はいません。古文も同じです。正しい攻略ルートがあります。</p>
+
+<table class="compare">
+  <tr><th>よくある誤解</th><th>実際</th></tr>
+  <tr><td class="misconception">古文は現代語の古いバージョンだから感覚で読める</td><td class="truth">古文は英語と同じ「別の言語」。単語・文法・常識の正しいインプットが必須</td></tr>
+  <tr><td class="misconception">全文現代語訳の授業をこなせば読めるようになる</td><td class="truth">省略を補いながらストーリーを把握することが最重要</td></tr>
+  <tr><td class="misconception">文法の表を眺めて丸暗記すれば読める</td><td class="truth">文法は読解の中で「使い方」を学んで初めて定着する</td></tr>
+</table>
+
+<p>裏を返せば、<strong>正しい攻略ルートで積み上げた人は、ある時点から突然「読める」感覚が来ます。</strong>助動詞を見た瞬間に意味が分かる。主語が省略されていても誰の動作か分かる。和歌に込められた感情が分かる。それが古文を正しく学んだ先にある姿です。</p>
+
+<hr>
+
+<h2 id="bad">伸びない勉強法の正体</h2>
+
+<h3>❌ 現代語の感覚で読む</h3>
+
+<p>古文には、現代語と字が同じでも意味が全く違う単語がたくさんあります。これを知らずに現代語の感覚で読むと、文章の意味が真逆になります。</p>
+
+<pre>「やさし」→ 現代語では「優しい」だが、古文では「恥ずかしい・つらい」
+「おかし」→ 現代語では「おかしい」だが、古文では「趣がある・素晴らしい」
+「いみじ」→ 「非常に素晴らしい」と「ひどい・大変だ」の両方の意味がある
+「ありがたし」→ 現代語では「有難い」だが、古文では「珍しい・めったにない」</pre>
+
+<p>「いみじ」のように、<strong>プラスとマイナス真逆の意味を1語で持つ単語</strong>もあります。文脈次第で「最高だ」にも「ひどい」にもなる。現代語で言えば「やばい」に近い感覚です。これを現代語感覚で読んでしまうと、文章の内容が真逆になります。</p>
+
+<h3>❌ 文法の活用表を眺めて丸暗記しようとする</h3>
+
+<p>「ず・ざら・ざり・ず・ざる・ざれ・ざれ」という活用表を、意味も使い道も分からないまま暗記しようとすると、当然頭に入りません。<strong>「何のためにこれを覚えているのか」という目的意識のない暗記は、記憶に定着しないだけでなく、古文が嫌いになる原因になります。</strong></p>
+
+<p>文法は「読解の道具」です。文章の中で実際に使う場面を知ってから覚える方が、はるかに速く・確実に定着します。</p>
+
+<h3>❌ 全文を完璧に訳そうとする</h3>
+
+<p>古文は専門家でも解釈が分かれるほど難しい言語です。入試で求められているのは「完璧な現代語訳」ではなく「ストーリーの大まかな把握」と「設問に答えられる読解力」です。完璧に訳そうとして1文で立ち止まると、時間が足りなくなります。</p>
+
+<hr>
+
+<h2 id="good">伸びる勉強法：4段階の攻略ルート</h2>
+
+<p>古文は以下の4段階を、この順番で積み上げることで確実に読めるようになります。焦って順番を飛ばさないでください。</p>
+
+<div class="stage-box">
+  <span class="stage-num">STAGE 1</span><span class="stage-title">古文単語（200〜315語）</span>
+  <p>英語と同じく、単語が分からなければ何も読めない。まず最初に固める。現代語と意味が違う単語を「上書き」することが最優先。</p>
+</div>
+<div class="stage-box">
+  <span class="stage-num">STAGE 2</span><span class="stage-title">古典文法（活用・助動詞・敬語）</span>
+  <p>文章のルールを知らないと読めない。まず全体像を把握してから細部へ。文法は「読解の道具」として覚える。</p>
+</div>
+<div class="stage-box">
+  <span class="stage-num">STAGE 3</span><span class="stage-title">古文常識（平安時代の世界観）</span>
+  <p>現代とは全く違うルールで動く世界。これを知らないと場面の意味が分からない。読んでいてストーリーが見えてくる魔法のような知識。</p>
+</div>
+<div class="stage-box">
+  <span class="stage-num">STAGE 4</span><span class="stage-title">読解演習（省略補完・主語判断）</span>
+  <p>単語・文法・常識を使って実際の文章を読む。省略を補い、ストーリーを掴む。これができると「読める」という感覚が来る。</p>
+</div>
+
+<hr>
+
+<h2 id="how1" class="chapter">STAGE 1｜古文単語（200〜315語）</h2>
+
+<p>英語学習と全く同じです。単語が分からなければ文章は読めません。ただし英語と比べると、古文単語の量は圧倒的に少ない。200語あれば読めるようになり、315語あれば安定して得点できます。</p>
+
+<p>英単語を何百語も覚えられているなら、古文単語はずっと短期間で習得できます。</p>
+
+<h3><span class="how-label">HOW</span> 意味の「上書き」から始める</h3>
+
+<div class="how-block">
+  <div class="step">
+    <span class="step-label">まず「現代語と意味が違う単語」を優先して覚える</span>
+    <div class="step-body">
+      単語帳を開いたとき、最初に目を向けるべきは「現代語の感覚で読むと意味が逆になる単語」です。これを知らずにいると、どれだけ文章を読んでも内容が全部ズレます。
+      <span class="ex">
+        【今日から覚え直す単語リスト】<br>
+        やさし → 恥ずかしい・つらい（「優しい」ではない）<br>
+        おかし → 趣がある・素晴らしい（「おかしい」ではない）<br>
+        あはれ → しみじみとした感動・情趣（「哀れ」より豊かな感情）<br>
+        うつくし → かわいい・愛らしい（「美しい」より小さくかわいいもの）<br>
+        いみじ → 非常に・素晴らしい、またはひどい（文脈で判断）<br>
+        めでたし → 素晴らしい・立派だ（「めでたい」より広い意味）<br>
+        ありがたし → 珍しい・めったにない（「有難い」ではない）<br>
+        もてなす → 扱う・あしらう（「もてなす＝歓待」ではない）<br>
+        みる（見る）→ 結婚する（相手の姿を見ることが求愛の意味を持つため）
+      </span>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-label">1語に複数の意味がある単語は、全部セットで覚える</span>
+    <div class="step-body">
+      英単語は最初の意味だけ覚えればある程度通用しますが、古文単語は違います。1語にプラスとマイナス両方の意味が共存する単語があるからです。
+      <span class="ex">
+        「いみじ」の場合：<br>
+        ① 非常に・とても（強調）→「いみじくも美し」＝非常に美しい<br>
+        ② ひどい・大変だ（マイナス）→「いみじき目に遭ふ」＝ひどい目に遭う<br><br>
+        どちらの意味になるかは「文脈」で判断する。だから両方覚えることが必須。
+      </span>
+      単語帳に「意味①・意味②」と書いてある場合は、必ず全部覚えてください。一つしか覚えていないと、文章の意味が真逆になる可能性があります。
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-label">1冊を決めて、まず「全体を一周」する</span>
+    <div class="step-body">
+      単語帳は最初のページから完璧に覚えようとしないでください。それをやると3ページで嫌になります。<br><br>
+      正しい順番はこうです：<br>
+      ① 単語帳を最初から最後まで、意味を見ながらさらっと流し読みする（1〜2日）<br>
+      ② 2周目で「なんとなく見たことある」状態になっているので、今度は意味を隠してテストする<br>
+      ③ 言えなかった単語にチェックをつけ、チェックした単語だけ3周目に集中する<br><br>
+      「全体の地図」を先に把握してから細部を埋める。これが最も効率的な暗記の順番です。
+    </div>
+  </div>
+</div>
+
+<div class="scene-box">
+  <span class="scene-label">📖 この勉強をした3週間後のあなた</span>
+  <p>模試の古文を開いたとき、単語の意味がぱっと浮かぶようになっています。「あはれ」を見て「しみじみとした感動か」と即座に分かる。「いみじく」が出てきたら「前後の文脈でどちらの意味か確認しよう」と自然に判断できる。古文が「暗号」から「読める文章」に変わる最初の瞬間です。</p>
+</div>
+
+<hr>
+
+<h2 id="how2" class="chapter">STAGE 2｜古典文法（活用・助動詞・敬語）</h2>
+
+<p>古典文法は覚えることが多く、一番つまずきやすい部分です。ただし、<strong>正しい順番で取り組めば必ず身につきます。</strong>コツは「全体像を先に把握してから、細部を埋める」こと。いきなり助動詞の表を全部暗記しようとするから嫌になるのです。</p>
+
+<h3><span class="how-label">HOW</span> 動詞の活用の種類を「ず」で見分ける</h3>
+
+<div class="how-block">
+  <div class="step">
+    <span class="step-label">「ず」をつけて、直前の母音を確認するだけ</span>
+    <div class="step-body">
+      動詞の活用の種類を見分けるのに、一つのルールで9割解決できます。
+      <span class="ex">
+        動詞に「ず」をつけて、その直前の母音を見る<br><br>
+        「思う」→「思わず」→ 直前が「あ」段 → 四段活用<br>
+        「起く」→「起きず」→ 直前が「い」段 → 上二段活用<br>
+        「受く」→「受けず」→ 直前が「え」段 → 下二段活用<br>
+        「射る」→「射ず」  → 直前が「い」段で「いる」→ 上一段活用（君にいい日で覚える）<br>
+        「蹴る」→「蹴ず」  → 下一段活用（下一段＝蹴る一択）
+      </span>
+      テストで動詞が出てきたら、まず「ず」をつける。これを反射的にできるまで練習してください。
+    </div>
+  </div>
+</div>
+
+<h3><span class="how-label">HOW</span> 助動詞は「接続」で分類してから覚える</h3>
+
+<div class="how-block">
+  <div class="step">
+    <span class="step-label">助動詞を「未然形・連用形・終止形・連体形」のグループで整理する</span>
+    <div class="step-body">
+      助動詞を1個ずつバラバラに暗記しようとすると、数が多すぎて頭がパンクします。まず「どの形に接続するか」でグループ分けして、グループごとに覚えてください。
+      <span class="ex">
+        【未然形接続】→「まだやっていない・ぼんやりした世界」のイメージ<br>
+        ル・ラル：自発・受身・尊敬・可能（4つセットで覚える）<br>
+        ス・サス・シム：使役・尊敬<br>
+        ズ：打消し（〜しない）<br>
+        ム：推量・意志（〜だろう・〜しよう）<br><br>
+        【連用形接続】→「最もナチュラル・過去・完了」のイメージ<br>
+        キ：過去（〜した、直接体験）<br>
+        ケリ：過去・詠嘆（〜だったなあ）<br>
+        ツ・ヌ：完了（〜してしまった）<br>
+        タリ：完了・存続<br><br>
+        【終止形接続】→「言い切った感・推定・当然」のイメージ<br>
+        ベシ：当然・推量・意志・可能・命令・適当（スイカ止めて、で6つ覚える）<br>
+        ラシ：推定（〜らしい）<br>
+        メリ：推定・婉曲（〜ようだ）<br><br>
+        【連体形接続】→「強い断定」のイメージ<br>
+        ナリ：断定（〜である）<br>
+        タリ：断定（〜である）
+      </span>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-label">ル・ラルの4つの意味の使い分けを覚える</span>
+    <div class="step-body">
+      助動詞「ル・ラル」には「自発・受身・尊敬・可能」の4つの意味があり、これを使い分けることが問題で問われます。
+      <span class="ex">
+        【判断のポイント】<br>
+        主語が人間以外・感情を表す動詞 → 自発（思わる＝自然と思われる）<br>
+        「〜に（によって）」が前にある → 受身（人によりて見らる＝人に見られる）<br>
+        主語が高貴な人・尊敬語の文脈 → 尊敬（帝のたまはる＝帝がおっしゃる）<br>
+        打消しの言葉が後ろにある → 可能（行かれず＝行けない）
+      </span>
+    </div>
+  </div>
+</div>
+
+<h3><span class="how-label">HOW</span> 敬語で主語を特定する</h3>
+
+<div class="how-block">
+  <div class="step">
+    <span class="step-label">尊敬語か謙譲語かで、主語が分かる</span>
+    <div class="step-body">
+      古文は主語が省略されますが、敬語を読めば誰の動作かが分かります。これが古文読解で最も重要なスキルの一つです。
+      <span class="ex">
+        尊敬語が使われている → 主語（動作する人）が高貴な人<br>
+        謙譲語が使われている → 目的語（動作を受ける人）が高貴な人<br>
+        二重尊敬（させたまふ等）→ 主語は天皇・皇族レベル<br><br>
+        例）「帝のたまはせたまふ」<br>
+        ・のたまはす（おっしゃる）＝尊敬語<br>
+        ・たまふ（〜なさる）＝尊敬語<br>
+        → 二重尊敬 → 主語は天皇
+      </span>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-label">頻出の尊敬語・謙譲語を覚える</span>
+    <div class="step-body">
+      <span class="ex">
+        【尊敬語（主語が高貴な人）】<br>
+        たまふ・たぶ → お与えになる・〜なさる<br>
+        おはす・います・おはします → いらっしゃる<br>
+        のたまふ・おほす → おっしゃる<br>
+        おぼす・おぼしめす → お思いになる<br>
+        きこしめす → お聞きになる・召し上がる・（国を）治める<br>
+        めす → お呼びになる・お召しになる・召し上がる・お乗りになる<br><br>
+        【謙譲語（目的語が高貴な人）】<br>
+        まゐる・まうづ → 参る・伺う（また：召し上がる・差し上げる）<br>
+        まうす・きこゆ → 申し上げる<br>
+        つかうまつる → お仕えする・差し上げる<br>
+        はべり・さぶらふ → おります・候う（丁寧語としても使われる）<br>
+        まかる・まかづ → 退出する・お暇をいただく<br>
+        たてまつる → 差し上げる・〜申し上げる
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="scene-box">
+  <span class="scene-label">📖 この勉強をした1ヶ月後のあなた</span>
+  <p>古文の文章を読んでいて、助動詞を見た瞬間に「これは未然形接続のムだから推量か意志だな」と判断できるようになっています。敬語を見て「これは謙譲語だから、この動作の受け手が高貴な人だ。ということはこの主語は…」と自然に考えが流れていく。文法が「暗号」ではなく「読むための道具」として機能し始めた感覚です。</p>
+</div>
+
+<hr>
+
+<h2 id="how3" class="chapter">STAGE 3｜古文常識（平安時代の世界観）</h2>
+
+<p>古文常識は「覚えることが多くて大変そう」と思われがちですが、実は<strong>一度知ると古文が映画を観るように読めるようになる魔法のような知識です。</strong>現代の常識と全く違うルールを知っているかどうかで、文章の読みやすさが劇的に変わります。</p>
+
+<h3><span class="how-label">HOW</span> 平安時代の恋愛システムを理解する</h3>
+
+<div class="how-block">
+  <div class="step">
+    <span class="step-label">古文の恋愛には決まった「流れ」がある</span>
+    <div class="step-body">
+      古文に登場する恋愛場面は、ほぼ決まったパターンで進みます。このパターンを知っていると、場面の意味がすぐ分かります。
+      <span class="ex">
+        ① 垣間見（かいまみ）<br>
+           男性が女性の部屋をカーテン越しに覗き見する。<br>
+           犯罪ではなく、求愛行動のスタート。<br><br>
+        ② 懸想文（けそうぶみ）<br>
+           恋文・ラブレター。男性から女性へ送るのが基本。<br>
+           「文」「懸想文」が出てきたら恋文だと思ってよい。<br><br>
+        ③ 通い婚（かよいこん）<br>
+           男性が夜だけ女性の家に通う。同居しない。一夫多妻制が普通。<br>
+           「暁（あかつき）に帰る」＝夜明け前に男性が帰ること<br><br>
+        ④ 3日間通うと正式な結婚<br>
+           3日目の夜に餅の儀（ところあらわし）→ 披露宴で結婚成立。<br><br>
+        ⑤ 後朝の文（きぬぎぬのふみ）<br>
+           翌朝に男性が女性へ送る手紙。女性の不安を和らげるため。
+      </span>
+      この流れを知っていると、「帝が女性の部屋の前で立ち止まった」という場面が「垣間見の場面だ」と即座に分かります。知らないと意味不明な場面も、知っていれば自然に読めます。
+    </div>
+  </div>
+</div>
+
+<h3><span class="how-label">HOW</span> 天皇家の呼び方を覚える（主語判断に直結）</h3>
+
+<div class="how-block">
+  <div class="step">
+    <span class="step-label">「帝」「御門」「内裏」が出てきたら天皇だと分かる</span>
+    <div class="step-body">
+      人物の呼び方・身分の名前を知っていると、敬語と組み合わせて主語が特定できます。
+      <span class="ex">
+        帝・御門・内裏 → 天皇<br>
+        東宮・春宮・灯台 → 皇太子（次の天皇）<br>
+        中宮 → 天皇の正妻（最上位）<br>
+        女御 → 天皇の妻（中宮の次）<br>
+        更衣 → 天皇の妻（女御の次）<br>
+        御息所（みやすどころ）→ 中宮を除いた天皇の妻たちの総称<br>
+        后宮（きさいのみや）→ 天皇の妻たちの集合名詞<br>
+        公達（きんだち）→ 貴族の息子・娘<br>
+        北の方 → 貴族の正妻
+      </span>
+      「帝のたまはせたまふ」のように二重尊敬が使われていて、「帝」という名詞が出てきたら、この動作の主語が天皇だと確定できます。
+    </div>
+  </div>
+</div>
+
+<h3><span class="how-label">HOW</span> 現代常識と違う場面の読み方</h3>
+
+<div class="how-block">
+  <div class="step">
+    <span class="step-label">「病気になった→僧を呼んで祈祷」は古文では普通</span>
+    <div class="step-body">
+      現代では病気になれば病院へ行きます。しかし古文の世界では、<strong>病気の原因は「仏教の修行が足りないから」</strong>です。治療法はお坊さんを呼んで加持祈祷をしてもらうこと。
+      <span class="ex">
+        古文でよく出る場面：<br>
+        「大殿の病いよいよ重くなりたまひければ、<br>
+         僧どもあまた召して、御加持まゐらす」<br><br>
+        → 誰かが重病になり、お坊さんをたくさん呼んで祈祷している場面。<br>
+        これを知らないと「なぜ病気なのに医者でなく僧が来るのか」と混乱する。<br>
+        知っていれば「病気の場面だ」と即座に分かる。
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="scene-box">
+  <span class="scene-label">📖 この勉強をした後のあなた</span>
+  <p>古文の文章を読んでいて、「男が女の部屋の前で立ち止まり、几帳の隙間から中を見た」という場面が出てきた瞬間、「垣間見だ。求愛の始まりだな」と分かる。「暁になりたれば、男は帰りにけり」という文章を見て「朝帰りの場面か、まだ通い婚の段階だな」と分かる。古文が「物語」として読めるようになる感覚です。</p>
+</div>
+
+<hr>
+
+<h2 id="how4" class="chapter">STAGE 4｜読解演習（省略補完・主語判断）</h2>
+
+<p>単語・文法・常識が揃ったら、実際の文章を読む練習に入ります。古文読解の本質は<strong>「省略を補い、ストーリーを把握すること」</strong>です。完璧に訳そうとしなくていい。大まかな流れをつかむことが最優先です。</p>
+
+<h3><span class="how-label">HOW</span> 文章を読むときの3ステップ</h3>
+
+<div class="how-block">
+  <div class="step">
+    <span class="step-label">STEP 1　読む前に「登場人物の関係図」を書く</span>
+    <div class="step-body">
+      文章を読む前に、リード文（前書き）と冒頭を見て、登場人物とその関係をメモ用紙に書き出してください。
+      <span class="ex">
+        例）「源氏と頭中将が女の家で対面している」という場面なら：<br><br>
+        源氏　←恋人関係→　某女<br>
+        　↑<br>
+        頭中将（源氏の友人・ライバル）<br><br>
+        これを書いておくだけで、省略された主語の候補が「源氏か頭中将か某女のどれか」に絞れる。
+      </span>
+      関係図を書かずに読み始めると、主語が省略されるたびに「これは誰の動作だ？」と迷子になります。1分かけて図を書くだけで、読むスピードが上がります。
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-label">STEP 2　動詞を見つけたら主語を書き込む</span>
+    <div class="step-body">
+      文章を読みながら、動詞が出てくるたびに「誰がやったのか」を前後の文脈から推測して、動詞の上に薄く書き込んでください。
+      <span class="ex">
+        主語判断の3つのルール：<br><br>
+        ① 「て・つつ・で」→ 主語が変わらない確率 90%<br>
+           「笑ひて去りぬ」→ 笑ったのも去ったのも同じ人<br><br>
+        ② 「が・を・に・ど」（接続助詞として）→ 主語が変わる確率 70%<br>
+           「Aが歌を詠みたるを、Bが聞きけり」→ 詠んだA・聞いたB<br><br>
+        ③ 敬語 → 主語または目的語が分かる<br>
+           尊敬語の動詞の主語は高貴な人<br>
+           謙譲語の動詞の目的語（受け手）は高貴な人
+      </span>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-label">STEP 3　1段落ごとに「何が起きたか」を一言で言う</span>
+    <div class="step-body">
+      1段落読むごとに、本を閉じて（あるいは目を離して）「この段落では何が起きたか」を一言でつぶやいてください。
+      <span class="ex">
+        例）「この段落では、源氏が女の部屋を訪ねて、和歌を詠み交わした」<br><br>
+        これができれば、その段落を理解できている証拠。<br>
+        言えなければ、もう一度読む。
+      </span>
+      読み終えたとき「最初にAがいて→Bと出会って→こういうことが起きて→最後こうなった」という流れを言葉にできれば、文章を把握できています。
+    </div>
+  </div>
+</div>
+
+<h3><span class="how-label">HOW</span> 問題を解くときのコツ</h3>
+
+<div class="how-block">
+  <div class="step">
+    <span class="step-label">選択肢を先に読んでから文章に入る</span>
+    <div class="step-body">
+      古文は完璧に訳せる人はいません。選択肢には文章の内容・ヒントが詰まっています。間違いの選択肢でも、一部は正しい情報を含んでいます。
+      <span class="ex">
+        手順：<br>
+        ① 問題の選択肢を先にさらっと読む<br>
+        ② 「この文章はこういうストーリーかもしれない」という仮説を立てる<br>
+        ③ その仮説を持って文章を読む<br>
+        → 読みやすさが全然違う
+      </span>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-label">選択肢の「違い」を見つけて本文で確認する</span>
+    <div class="step-body">
+      5択の選択肢を並べたとき、どこが違うのかを比較してください。違いがある箇所を本文で確認し、文法知識・単語知識で絞り込みます。
+      <span class="ex">
+        例）選択肢1〜3は「〜ならば」、選択肢4・5は「〜なので」と訳している<br>
+        → 本文の該当箇所を確認<br>
+        → 未然形＋ばなら「〜ならば（仮定）」が正しい<br>
+        → 選択肢4・5は消える<br><br>
+        このように「選択肢の傷を探す」やり方で、正答率が一気に上がる。
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="scene-box">
+  <span class="scene-label">📖 この勉強を続けた2ヶ月後のあなた</span>
+  <p>古文の文章を開いた瞬間から、登場人物の関係が見えている。敬語を見て主語を特定できる。「て」が出てきたら「同じ人が続けるな」と自動的に判断できる。1段落読んで「この場面では源氏が女のもとを訪れたんだな」と一言で言える。設問を見たとき、根拠となる箇所を本文から指差しできる。古文が「解ける科目」になっています。</p>
+</div>
+
+<hr>
+
+<h2 id="how5" class="chapter">音読で加速させる</h2>
+
+<p>古文は英語と同じ「別の言語」です。そして英語学習で音読が効果的なように、<strong>古文も音読との相性が抜群に良い</strong>のです。</p>
+
+<p>理由は3つあります。</p>
+
+<p>まず、古文は和歌（5・7・5・7・7）に代表されるように、<strong>元々「声に出して読むもの」</strong>として作られています。音のリズムが意味と結びつくため、目で見るより耳で聞く方が記憶に残りやすい単語や表現が多い。次に、<strong>助動詞の活用はリズムで覚える方が圧倒的に速い</strong>。「ず・ざら・ざり・ず・ざる・ざれ・ざれ」は口で繰り返す方が体に染み込みます。そして、<strong>音読すると「省略の違和感」に気づきやすくなります。</strong>黙読では読み飛ばしてしまう主語の省略も、声に出すと「ここで誰の話か分からなくなった」という詰まり方をするので、立ち止まる習慣がつきます。</p>
+
+<h3><span class="how-label">HOW</span> 音読の具体的なやり方</h3>
+
+<div class="how-block">
+  <div class="step">
+    <span class="step-label">STEP 1　まず歴史的仮名遣いの読み方を確認する</span>
+    <div class="step-body">
+      音読を始める前に、歴史的仮名遣いの読み方（現代語への変換ルール）を確認してください。間違った音で繰り返すと、誤った発音が定着してしまいます。
+      <span class="ex">
+        【歴史的仮名遣い → 現代の読み方】<br>
+        「は」行「ひ・ふ・へ・ほ」が語中・語尾に来たとき<br>
+        　→ 「わ・い・う・え・お」と読む<br>
+        　例）「いはく」→「いわく」、「てふ」→「ちょう」<br><br>
+        「ぢ・づ」→「じ・ず」と読む<br>
+        「ゐ・ゑ・を」（語頭以外）→「い・え・お」と読む<br>
+        「au」→「おう」と読む（例：「たまふ」→「たもう」）<br>
+        「iu」→「ゆう」と読む（例：「いう」→「ゆう」）
+      </span>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-label">STEP 2　現代語訳を確認してから音読する</span>
+    <div class="step-body">
+      意味が分からないまま音読しても効果は半減します。最初に現代語訳を確認してから音読することで、音と意味がセットで脳に入ります。
+      <span class="ex">
+        手順：<br>
+        ① 文章の現代語訳を読む（問題集の解説でOK）<br>
+        ② 古文の原文を見ながら、ゆっくり声に出して読む<br>
+        ③ 詰まったら意味を確認して、また音読する<br>
+        ④ スムーズに読めるようになったら、意味を思い浮かべながら音読する
+      </span>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-label">STEP 3　助動詞の活用は声に出してリズムで覚える</span>
+    <div class="step-body">
+      活用表を眺めるより、声に出して繰り返す方が圧倒的に速く覚えられます。
+      <span class="ex">
+        毎日3分、声に出して繰り返す：<br><br>
+        【打消しのズ】<br>
+        「ず・ざら・ざり・ず・ざる・ざれ・ざれ」（ラ変型の活用）<br><br>
+        【過去のキ】<br>
+        「せ・○・き・し・しか・○」（収支系が基本系と同じ）<br><br>
+        【推量のム】<br>
+        「○・○・む・む・め・○」（収支連体以前のルール）<br><br>
+        口が勝手に動くようになるまで繰り返すと、実際の文章でも瞬時に識別できる。
+      </span>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-label">STEP 4　通学・移動中に「音読→アクティブリコール」を繰り返す</span>
+    <div class="step-body">
+      電車や歩きながら、昨日読んだ古文の文章を声に出して思い出してみてください。完璧に覚えていなくていいです。「あの場面はどんな話だったか」を口でつぶやくだけで、記憶の定着が大きく変わります。
+      <span class="ex">
+        実際のやり方：<br>
+        ① 小声で「昨日の古文は…源氏が女の部屋を訪ねて…」と話す<br>
+        ② 詰まったら「あのシーンで使われていた助動詞は何だったか」を考える<br>
+        ③ 帰宅後に確認する<br><br>
+        これは「アクティブリコール（何も見ずに思い出す）」と組み合わせた最強の復習法です。
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="scene-box">
+  <span class="scene-label">📖 音読を習慣にした1ヶ月後のあなた</span>
+  <p>「ず・ざら・ざり・ず・ざる・ざれ・ざれ」が口から自然に出てくるようになっています。古文の文章を声に出して読んでいて、詰まる場所が「まだ理解が足りていない部分」だと分かるようになっています。音読をしながら「この『て』は主語が変わらないから同じ人の動作だな」と自然に考えが流れるようになっています。</p>
+</div>
+
+<hr>
+
+<h2 id="how6" class="chapter">和歌・修辞法の読み方</h2>
+
+<p>古文には和歌が登場することが多く、修辞法（技法）を知っていると読みやすくなります。ただし<strong>和歌だけで問題を解こうとしないことが大前提</strong>です。</p>
+
+<h3><span class="how-label">HOW</span> 和歌の読み方3ステップ</h3>
+
+<div class="how-block">
+  <div class="step">
+    <span class="step-label">STEP 1　5・7・5・7・7に分解して句切れを見つける</span>
+    <div class="step-body">
+      和歌が出てきたら、まず5・7・5・7・7のリズムに分解してください。句切れ（丸がつく場所・言い切りの場所）を見つけることで、和歌の構造が分かります。
+      <span class="ex">
+        「花の色は　移りにけりな　いたづらに<br>
+         わが身世にふる　ながめせしまに」<br><br>
+        → 「いたづらに」の後で句切れ（三句切れ）<br>
+        → 前半：花の色が色あせてしまった<br>
+        → 後半：私が物思いにふけっている間に
+      </span>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-label">STEP 2　和歌の前後の文脈を読んで、状況を把握する</span>
+    <div class="step-body">
+      和歌は「誰が誰に・どんな状況で詠んだか」によって意味が変わります。和歌だけ読んで解釈しようとせず、<strong>前後の本文を読んで状況を把握してから和歌に戻る</strong>のが正しい順番です。
+      <span class="ex">
+        手順：<br>
+        ① 和歌の前の文章を読む（誰がどんな状況か把握する）<br>
+        ② 和歌を読む（感情の部分に注目する）<br>
+        ③ 和歌の後の文章で答え合わせをする<br>
+        ④ 選択肢は「本文の文脈に合っているか」で選ぶ
+      </span>
+    </div>
+  </div>
+  <div class="step">
+    <span class="step-label">STEP 3　修辞法を知っていると読みが深くなる</span>
+    <div class="step-body">
+      修辞法を全部覚えようとしなくていいです。まず「掛詞」だけ確実に押さえてください。掛詞は問題で最も問われる技法です。
+      <span class="ex">
+        【掛詞（かけことば）】<br>
+        一つの言葉に複数の意味を持たせる技法。<br>
+        ひらがな表記・地名が含まれていたら掛詞の可能性が高い。<br><br>
+        例）「ながめ」= 「眺め（景色を見ること）」＋「長雨（長く降る雨）」<br>
+        例）「ふる」 = 「降る（雨が降る）」＋「経る（時間が経つ）」＋「振る（袖を振る）」<br><br>
+        【枕詞（まくらことば）】<br>
+        特定の言葉を導く5音の決まり文句。訳さなくていい。<br>
+        「ひさかたの」→ 光・月・空に関する言葉が来る<br>
+        「あをによし」→ 奈良が来る<br>
+        「ちはやぶる」→ 神・神社が来る<br><br>
+        【序詞（じょことば）】<br>
+        ある言葉を導くための前フリ。7音以上。枕詞と違い、訳す必要がある。<br>
+        「難波のあしのよしともいはれぬ身にして」のように<br>
+        前半が景色の描写で、後半の感情の言葉を導く。
+      </span>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="action-box">
+  <h3>📌 今日のアクションプラン</h3>
+  <p><strong>今日の授業で出てきた古文の文章を、声に出して3回音読してください。</strong></p>
+  <p>やり方はこれだけです：</p>
+  <ol>
+    <li>現代語訳（教科書の注釈か問題集の解説）を先に確認する</li>
+    <li>古文の原文を見ながら、ゆっくり声に出して1回読む</li>
+    <li>動詞が出てくるたびに、誰の動作か一瞬考えながら読む</li>
+    <li>読み終えたら本を閉じて「この文章は何の話だったか」を一言でつぶやく</li>
+    <li>もう1回、意味を思い浮かべながら音読する</li>
+  </ol>
+  <p class="note">3回読めば、その文章は「なんとなく分かる文章」から「読んだことがある文章」に変わります。古文が「別の言語」から「読める言語」に変わるのは、少しずつ「読んだことがある文章」を増やしていった先にあります。焦らず、今日の1文から始めてください。</p>
+</div>
+
+</div>
+</body>
+</html>
